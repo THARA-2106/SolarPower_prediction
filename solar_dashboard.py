@@ -25,6 +25,39 @@ LON = 76.9558
 MODEL_PATH = 'solar_model.joblib'
 model = None
 
+# ---------------- Styling Constants ----------------
+UPLOAD_STYLE = {
+    'width': '45%',
+    'height': '60px',
+    'lineHeight': '60px',
+    'borderWidth': '1px',
+    'borderStyle': 'dashed',
+    'borderRadius': '5px',
+    'textAlign': 'center',
+    'margin': '10px',
+    'cursor': 'pointer',
+    'backgroundColor': '#f8f9fa',
+    'color': '#495057',
+    'transition': 'all 0.3s ease'
+}
+
+BUTTON_STYLE = {
+    'margin': '10px',
+    'padding': '10px 20px',
+    'fontSize': '16px',
+    'backgroundColor': '#3498db',
+    'color': 'white',
+    'border': 'none',
+    'borderRadius': '5px',
+    'cursor': 'pointer',
+    'transition': 'all 0.3s ease'
+}
+
+BUTTON_STYLE_HOVER = {
+    'backgroundColor': '#2980b9',
+    'transform': 'translateY(-2px)'
+}
+
 # ---------------- Helper Functions ----------------
 def log_time(func):
     """Decorator to log function execution time."""
@@ -325,7 +358,7 @@ app.layout = html.Div([
                     'Drag and Drop or ',
                     html.A('Select Generation Data')
                 ]),
-                style=upload_style
+                style=UPLOAD_STYLE
             ),
             dcc.Upload(
                 id='upload-weather',
@@ -333,7 +366,7 @@ app.layout = html.Div([
                     'Drag and Drop or ',
                     html.A('Select Weather Data')
                 ]),
-                style=upload_style
+                style=UPLOAD_STYLE
             ),
         ], style={'display': 'flex', 'justifyContent': 'space-around', 'marginBottom': '20px'}),
         
@@ -345,7 +378,7 @@ app.layout = html.Div([
         # Model Training Section
         html.Div([
             html.Button('Train Model', id='train-button', n_clicks=0, 
-                       style=button_style),
+                       style=BUTTON_STYLE),
             dcc.Loading(
                 id="loading-train",
                 type="default",
@@ -358,7 +391,7 @@ app.layout = html.Div([
         # Forecast Section
         html.Div([
             html.Button('Get 24-Hour Forecast', id='forecast-button', n_clicks=0,
-                       style=button_style),
+                       style=BUTTON_STYLE),
             dcc.Loading(
                 id="loading-forecast",
                 type="default",
@@ -531,46 +564,13 @@ def forecast_solar(n_clicks):
         return {}, html.Div(f"Error generating forecast: {error_msg}", 
                           style={'color': 'red'})
 
-# ---------------- Styling Constants ----------------
-upload_style = {
-    'width': '45%',
-    'height': '60px',
-    'lineHeight': '60px',
-    'borderWidth': '1px',
-    'borderStyle': 'dashed',
-    'borderRadius': '5px',
-    'textAlign': 'center',
-    'margin': '10px',
-    'cursor': 'pointer',
-    'backgroundColor': '#f8f9fa',
-    'color': '#495057',
-    'transition': 'all 0.3s ease'
-}
-
-button_style = {
-    'margin': '10px',
-    'padding': '10px 20px',
-    'fontSize': '16px',
-    'backgroundColor': '#3498db',
-    'color': 'white',
-    'border': 'none',
-    'borderRadius': '5px',
-    'cursor': 'pointer',
-    'transition': 'all 0.3s ease'
-}
-
-button_style_hover = {
-    'backgroundColor': '#2980b9',
-    'transform': 'translateY(-2px)'
-}
-
 # Add hover effects
 app.clientside_callback(
     """
     function(hover) {
         return hover ? %s : {};
     }
-    """ % button_style_hover,
+    """ % BUTTON_STYLE_HOVER,
     Output('train-button', 'style'),
     [Input('train-button', 'n_clicks')]
 )
@@ -580,7 +580,7 @@ app.clientside_callback(
     function(hover) {
         return hover ? %s : {};
     }
-    """ % button_style_hover,
+    """ % BUTTON_STYLE_HOVER,
     Output('forecast-button', 'style'),
     [Input('forecast-button', 'n_clicks')]
 )
